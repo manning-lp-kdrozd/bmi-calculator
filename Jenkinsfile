@@ -1,10 +1,10 @@
 pipeline {
     agent any 
     stages {
-        stage('SCA') {
-            steps {
-                echo 'Hello world!' 
+        stage('Static Code Analysis'){
+            withSonarQubeEnv('sonarqube') {
+                sh 'sonar-scanner'
             }
-        }
+    }
     }
 }
