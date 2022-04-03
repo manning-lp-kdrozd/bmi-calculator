@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker { image 'node:16.13.1-alpine' }
+        docker { image 'sonarsource/sonar-scanner-cli' }
     }
     stages {
         stage('Static Code Analysis') {
