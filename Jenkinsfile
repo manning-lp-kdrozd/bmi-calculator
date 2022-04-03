@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'sonarsource/sonar-scanner-cli:latest'
+        }   
+    }
     stages {
         stage('Static Code Analysis') {
             steps {
@@ -17,4 +21,7 @@ pipeline {
         }
     }
 }
+
+
+
 
