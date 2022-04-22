@@ -18,12 +18,21 @@ pipeline {
         stage('Quality Test') {
             steps {
                 sh 'CI=true npm test -- --coverage'
+                publishCoverage(
+                    adapters: [
+                        cobertura(path: 'coverage/cobertura-coverage.xml', thresholds: [[unhealthyThreshold: 20.0, unstableThreshold: 0.0]])
+                    ],
+                    sourceFileResolver: sourceFiles('STORE_ALL_BUILD'),
+                    globalThresholds: [
+                        [
+                            thresholdTarget: 'Line',
+                            unhealthyThreshold: 50.0,
+                            unstableThreshold: 50.0
+                        ]
+                    ]
+                )
             }
-            post {
-                always {
-                    step([$class: 'CoberturaPublisher', coberturaReportFile: 'coverage/cobertura-coverage.xml'])
-                }
-            }
+         
         }
     }
 }
