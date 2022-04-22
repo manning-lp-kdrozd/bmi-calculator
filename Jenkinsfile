@@ -10,21 +10,19 @@ pipeline {
                 sh 'npm install' 
             }
         }
-    stage('Quality Test') {
-        steps {
-            script {
-            sh 'npm run coverage'
-            }
-        }
-        post {
-            always {
-            step([$class: 'CoberturaPublisher', coberturaReportFile: 'output/coverage/jest/cobertura-coverage.xml'])
-            }
-        }
-        }
         stage('Test') { 
             steps {
                 sh 'npm test' 
+            }
+        }
+        stage('Quality Test') {
+            steps {
+                sh 'npm run coverage'
+            }
+            post {
+                always {
+                    step([$class: 'CoberturaPublisher', coberturaReportFile: 'output/coverage/jest/cobertura-coverage.xml'])
+                }
             }
         }
     }
