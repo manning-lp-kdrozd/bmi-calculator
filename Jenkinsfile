@@ -1,27 +1,15 @@
 pipeline {
     agent {
         docker {
-            image 'sonarsource/sonar-scanner-cli:latest'
-        }   
+            image 'node:16.13.1-alpine' 
+            args '-p 3000:3000' 
+        }
     }
     stages {
-        stage('Static Code Analysis') {
+        stage('Build') { 
             steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh 'sonar-scanner'
-                }
-            }
-        }
-        stage("Quality Gate"){
-            steps {
-                timeout(unit: 'SECONDS', time: 60) {
-                    waitForQualityGate abortPipeline: true
-                }
+                sh 'npm install' 
             }
         }
     }
 }
-
-
-
-
