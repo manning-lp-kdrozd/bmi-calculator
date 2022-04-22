@@ -26,8 +26,12 @@
     "cypress": "cypress open"
   },
   "jest": {
+    "coverageReporters": [
+      "text",
+      "cobertura"
+    ],
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx}",
+      "src/*/.{js,jsx}",
       "!src/index.js"
     ]
   },
