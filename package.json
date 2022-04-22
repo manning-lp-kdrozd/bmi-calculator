@@ -23,10 +23,14 @@
     "deploy": "gh-pages -d build",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "report-coverage": "cat ./coverage/lcov.info | codecov",
-    "coverage" : "jest --coverage --coverageDirectory=output/coverage/jest",
     "cypress": "cypress open"
   },
   "jest": {
+    "coverageThreshold": {
+      "global": {
+        "lines": 70
+      }
+    },
     "coverageReporters": [
       "text",
       "cobertura"

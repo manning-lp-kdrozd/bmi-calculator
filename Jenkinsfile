@@ -12,12 +12,12 @@ pipeline {
         }
         stage('Test') { 
             steps {
-                sh 'npm test' 
+                sh 'CI=true npm test' 
             }
         }
         stage('Quality Test') {
             steps {
-                sh 'npm run coverage'
+                sh 'CI=true npm test -- --coverage'
             }
             post {
                 always {
