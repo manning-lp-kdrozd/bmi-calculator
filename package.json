@@ -23,6 +23,7 @@
     "deploy": "gh-pages -d build",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "report-coverage": "cat ./coverage/lcov.info | codecov",
+    "coverage" : "jest --coverage --coverageDirectory=output/coverage/jest",
     "cypress": "cypress open"
   },
   "jest": {
@@ -58,6 +59,7 @@
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint-plugin-cypress": "^2.10.3",
     "gh-pages": "^2.2.0",
-    "jest-enzyme": "^7.1.2"
+    "jest-enzyme": "^7.1.2",
+    "eslint": "^6.1.0"
   }
 }
