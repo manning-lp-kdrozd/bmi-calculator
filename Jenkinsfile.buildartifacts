@@ -16,24 +16,10 @@ pipeline {
                 sh 'CI=true npm test' 
             }
         }
-        stage('Quality Test') {
+        stage('Build Artifact') { 
             steps {
-                sh 'CI=true npm test -- --coverage'
-                publishCoverage(
-                    adapters: [
-                        cobertura(coberturaReportFile: 'coverage/cobertura-coverage.xml')
-                    ],
-                    sourceFileResolver: sourceFiles('STORE_ALL_BUILD'),
-                    globalThresholds: [
-                        [
-                            thresholdTarget: 'Line',
-                            unhealthyThreshold: 70.0,
-                            unstableThreshold: 70.0
-                        ]
-                    ]
-                )
+                sh 'CI=true npm run build' 
             }
-         
         }
     }
 }
