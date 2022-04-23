@@ -27,8 +27,8 @@ pipeline {
                     globalThresholds: [
                         [
                             thresholdTarget: 'Line',
-                            unhealthyThreshold: 50.0,
-                            unstableThreshold: 50.0
+                            unhealthyThreshold: 70.0,
+                            unstableThreshold: 70.0
                         ]
                     ]
                 )
