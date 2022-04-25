@@ -1,0 +1,34 @@
+pipeline {
+    agent {
+        docker {
+            image 'node:16.13.1-alpine'            
+        }
+    }
+    stages {
+        stage('Build') { 
+            steps {
+                sh 'node --version'
+                sh 'npm install' 
+            } 
+        }
+        stage('Build Artifact') { 
+            steps {
+                sh 'CI=true npm run build'
+            }
+             post {
+                success {
+                    echo 'I succeeded!'
+                    zip zipFile: 'build.zip', archive: false, dir: 'build', overwrite: true
+                    stash name: 'mybmicalc', allowEmpty: false, includes: 'build.zip'
+                    slackSend channel: '#kdmicalcpipeline', color: 'good', message: "bmi calc artifacts stashed :)"
+   
+                }
+             }
+        }
+        stage('Unstash test stage') { 
+            steps {
+                unstash 'mybmicalc'
+            } 
+        }
+    }
+}
