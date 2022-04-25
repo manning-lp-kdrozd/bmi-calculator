@@ -43,7 +43,7 @@ pipeline {
                 }
             }           
             steps {
-                sh 'trivy --cache-dir=/tmp/ image krzysiekdrozd/bmicalc:latest'
+                sh 'trivy --cache-dir=/tmp/ image --format=json --output=./results.json krzysiekdrozd/bmicalc:latest'
                 recordIssues(tools: [trivy(pattern: 'results.json')])
             }
         }
