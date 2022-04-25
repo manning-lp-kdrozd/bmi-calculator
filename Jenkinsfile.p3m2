@@ -21,19 +21,20 @@ pipeline {
                 }
             }
         }
-        stage('Docker image') { 
-            steps {
+        // There was problem and execution took minutes, so disabled it for now, as image is in local cache and dockerhub any way
+        // stage('Docker image') { 
+        //     steps {
 
-                // some block, this should use public DockerHub by default
-                script{
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                        unstash 'mybmicalc'
-                        unzip dir: 'build', glob: '', zipFile: 'build.zip'
-                        docker.build('krzysiekdrozd/bmicalc').push('latest')
-                    }
-                }
-            } 
-        }
+        //         // some block, this should use public DockerHub by default
+        //         script{
+        //             docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+        //                 unstash 'mybmicalc'
+        //                 unzip dir: 'build', glob: '', zipFile: 'build.zip'
+        //                 docker.build('krzysiekdrozd/bmicalc').push('latest')
+        //             }
+        //         }
+        //     } 
+        // }
         stage('Scan with Trivy') {
             agent {
                 docker {
