@@ -1,14 +1,12 @@
 pipeline {
     agent any
 
-    stages {
-        stage('CI') {
+    stages {        
+        stages {
             agent {
                 docker { image 'node:16.13.1-alpine' }
             }
-        }
-        stages {
-            stage('NPM') {
+            stage('nmp check') {
                 steps {
                     // lazy way, probably should check workspace cleaning plugin
                     sh 'rm -fv build.zip'
