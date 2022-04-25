@@ -43,6 +43,7 @@ pipeline {
             }           
             steps {
                 sh 'trivy image krzysiekdrozd/bmicalc:latest'
+                recordIssues(tools: [trivy(pattern: 'results.json')])
             }
         }
     }
