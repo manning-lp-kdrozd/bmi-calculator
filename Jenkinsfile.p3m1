@@ -1,19 +1,13 @@
 pipeline {
     agent any
 
-    stages {
-        agent {
-            docker { image 'node:16.13.1-alpine' }
-        }
-        stage('nmp check') {
-            steps {
-                // lazy way, probably should check workspace cleaning plugin
-                sh 'rm -fv build.zip'
-                sh 'node --version'
-            }
-        }
+    stages {        
         stage('Build') {
+            agent {
+                docker { image 'node:16.13.1-alpine' }
+            }
             steps {
+                sh 'node --version'
                 sh 'CI=true npm install'
                 sh 'CI=true npm run build'
             }
