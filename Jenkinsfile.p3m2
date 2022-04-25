@@ -38,11 +38,11 @@ pipeline {
             agent {
                 docker {
                     image 'aquasec/trivy:latest'
-                    args "--entrypoint='--cache-dir=.'"
+                    args "--entrypoint=''"
                 }
             }           
             steps {
-                sh 'trivy image krzysiekdrozd/bmicalc:latest'
+                sh 'trivy --cache-dir=/tmp/ image krzysiekdrozd/bmicalc:latest'
                 recordIssues(tools: [trivy(pattern: 'results.json')])
             }
         }
