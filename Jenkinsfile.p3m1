@@ -34,8 +34,8 @@ pipeline {
                 unstash 'mybmicalc'
                 unzip dir: 'build', glob: '', zipFile: 'build.zip'
                 // some block, this should use public DockerHub by default
-                
-                withDockerRegistry(credentialsId: 'dockerhub') {
+
+                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://registry.hub.docker.com') {
                     sh 'docker push krzysiekdrozd/bmicalc:latest'
                 }
             } 
