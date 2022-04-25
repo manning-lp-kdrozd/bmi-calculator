@@ -25,11 +25,12 @@ pipeline {
             steps {
 
                 // some block, this should use public DockerHub by default
-                
-                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                    unstash 'mybmicalc'
-                    unzip dir: 'build', glob: '', zipFile: 'build.zip'
-                    docker.build('krzysiekdrozd/bmicalc').push('latest')
+                script{
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                        unstash 'mybmicalc'
+                        unzip dir: 'build', glob: '', zipFile: 'build.zip'
+                        docker.build('krzysiekdrozd/bmicalc').push('latest')
+                    }
                 }
             } 
         }
