@@ -1,44 +1,47 @@
 pipeline {
-    environment {
-    registry = "krzysiekdrozd/bmicalc"
-    registryCredential = 'dockerhub'
-}
-    agent {
-        docker {
-            image 'node:16.13.1-alpine'            
-        }
-    }
-    stages {
-        stage('Build') { 
-            steps {
-                sh 'node --version'
-                sh 'npm install' 
-            } 
-        }
-        stage('Build Artifact') { 
-            steps {
-                sh 'CI=true npm run build'
-            }
-             post {
-                success {
-                    echo 'I succeeded!'
-                    zip zipFile: 'build.zip', archive: false, dir: 'build', overwrite: true
-                    stash name: 'mybmicalc', allowEmpty: false, includes: 'build.zip'
-                    slackSend channel: '#kdmicalcpipeline', color: 'good', message: "bmi calc artifacts stashed :)"
-   
-                }
-             }
-        }
-        stage('Docker image') { 
-            steps {
-                unstash 'mybmicalc'
-                unzip dir: 'build', glob: '', zipFile: 'build.zip'
-                // some block, this should use public DockerHub by default
+    agent any
 
-                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://registry.hub.docker.com') {
-                    sh 'docker push krzysiekdrozd/bmicalc:latest'
+    stages {
+        stage('CI') {
+            agent {
+                docker { image 'node:16.13.1-alpine' }
+            }
+        }
+        stages {
+            stage('NPM') {
+                steps {
+                    // lazy way, probably should check workspace cleaning plugin
+                    sh 'rm -fv build.zip'
+                    sh 'node --version'
                 }
-            } 
+            }
+            stage('Build') {
+                steps {
+                    sh 'CI=true npm install'
+                    sh 'CI=true npm run build'
+                }
+                post {
+                    success {
+                        echo 'Build succeeded!'
+                        zip zipFile: 'build.zip', archive: false, dir: 'build', overwrite: true
+                        stash name: 'mybmicalc', allowEmpty: false, includes: 'build.zip'
+                        // disabled - too much noise
+                        // slackSend channel: '#kdmicalcpipeline', color: 'good', message: "bmi calc artifacts stashed :)"
+                    }
+                }
+            }
+            stage('Docker image') { 
+                steps {
+
+                    // some block, this should use public DockerHub by default
+                    
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                        unstash 'mybmicalc'
+                        unzip dir: 'build', glob: '', zipFile: 'build.zip'
+                        docker.build('krzysiekdrozd/bmicalc').push('latest')
+                    }
+                } 
+            }
         }
     }
 }
