@@ -56,12 +56,12 @@ pipeline {
         stage('JMeter testing') {
             agent {
                 docker {
-                    image 'vmarrazzo/jmeter'
+                    image 'blazemeter/taurus'
                     args "--entrypoint=''"
                 }
             }
             steps {
-                bzt 'bmicalcperftest.jmx'
+                bzt 'taurustest.yml'
                 perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: '**/*.jtl'
             }
         }
