@@ -18,5 +18,3 @@ provisioning: local
 modules:
   jmeter:
     class: bzt.modules.jmeter.JMeterExecutor
-reporting:
-- module: status
