@@ -57,11 +57,11 @@ pipeline {
             agent {
                 docker {
                     image 'blazemeter/taurus'
-                    args "--entrypoint='-n'"
+                    args '--entrypoint=""'
                 }
             }
             steps {
-                bzt 'taurustest.yml'
+                bzt '-n taurustest.yml'
                 perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: '**/*.jtl'
             }
         }
