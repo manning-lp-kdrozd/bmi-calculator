@@ -57,7 +57,7 @@ pipeline {
             agent {
                 docker {
                     image 'vmarrazzo/jmeter'
-                    args "--entrypoint=''"
+                    args "--entrypoint='/launch.sh'"
                 }
             }
             steps {
