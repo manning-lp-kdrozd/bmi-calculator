@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,8 +15,8 @@ spec:
     spec:
      containers:
         - name: bmicalc
-          image: krzysiekdrozd/bmicalc:latest 
- replicas: 2
+          image: krzysiekdrozd/bmicalc:latest
+ replicas: 3
  
  selector: 
     matchLabels:
@@ -39,3 +38,6 @@ spec:
     port: 80
     targetPort: 80
  type: LoadBalancer
+ externalIPs:
+   - 192.168.100.57
+   
