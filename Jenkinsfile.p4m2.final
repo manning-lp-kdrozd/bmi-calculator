@@ -57,6 +57,7 @@ pipeline {
             agent {
                 docker {
                     image 'vmarrazzo/jmeter'
+                    args "--entrypoint=''"
                 }
             }
             steps {
