@@ -35,7 +35,23 @@ pipeline {
                 )
             }
          
-        }  
+        }
+        stage('Static Code Analysis') {
+            agent {
+                docker {
+                    image 'sonarsource/sonar-scanner-cli:latest'
+                }   
+            }
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh 'sonar-scanner'
+                }
+                timeout(unit: 'SECONDS', time: 60) {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
         stage('Build') {
             agent {
                 docker { image 'node:16.13.1-alpine' }
