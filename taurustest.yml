@@ -4,7 +4,9 @@ execution:
 scenarios:
   simple:
     script: bmicalcperftest.jmx
-    
+settings:
+  check-interval: 5s
+  default-executor: jmeter
 modules:
   jmeter:
     properties:
