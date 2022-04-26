@@ -61,7 +61,8 @@ pipeline {
                 }
             }
             steps {
-                sh '-j jmeter.save.saveservice.output_format=xml -n -t ./bmicalcperftest.jmx -l ./results.jlt'
+                bzt 'bmicalcperftest.jmx'
+                perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: '**/*.jtl'
             }
         }
     }
