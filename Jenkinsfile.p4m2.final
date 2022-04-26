@@ -56,12 +56,13 @@ pipeline {
         stage('JMeter testing') {
             agent {
                 docker {
-                    image 'blazemeter/taurus'
+                    image 'justb4/jmeter'
                     args '--entrypoint=""'
                 }
             }
             steps {
-                bzt '-n taurustest.yml'
+                sh '/opt/apache-jmeter-5.4.3/entrypoint.sh -n bmicalcperftest.jmx'
+                
                 perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: '**/*.jtl'
             }
         }
