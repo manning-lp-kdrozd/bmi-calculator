@@ -61,7 +61,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'jmeter -n -t ./bmicalcperftest.jmx'
+                sh 'jmeter -n -t ./bmicalcperftest.jmx  -l ./jmeterlog.jtl'
                 
                 perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: '**/*.jtl'
             }
