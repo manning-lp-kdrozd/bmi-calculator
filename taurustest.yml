@@ -1,13 +1,20 @@
-execution:
-- scenario: simple
 
+aggregator: aggregator
+
+execution:
+- executor: jmeter
+  scenario: jmx_sample
+  
 scenarios:
-  simple:
+  jmx_sample:
     script: bmicalcperftest.jmx
+      
+
 settings:
   check-interval: 5s
   default-executor: jmeter
-modules:
-  jmeter:
-    properties:
-      jmeter.save.saveservice.output_format: xml
+        
+provisioning: local
+
+reporting:
+- module: status
