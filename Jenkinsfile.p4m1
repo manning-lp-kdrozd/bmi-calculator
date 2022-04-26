@@ -47,5 +47,10 @@ pipeline {
                 recordIssues(tools: [trivy(pattern: './results.json')])
             }
         }
+        stage('Deploy on k8s') {
+            steps {
+                kubernetesDeploy configs: 'kube/**', kubeConfig: [path: ''], kubeconfigId: 'local_micro-kubeconfig', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+            }
+        }
     }
 }
