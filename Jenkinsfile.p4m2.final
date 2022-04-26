@@ -56,12 +56,12 @@ pipeline {
         stage('JMeter testing') {
             agent {
                 docker {
-                    image 'justb4/jmeter'
+                    image 'pedrocesarti/jmeter-docker'
                     args '--entrypoint=""'
                 }
             }
             steps {
-                sh 'entrypoint.sh -n bmicalcperftest.jmx'
+                sh 'jmeter -n -t ./bmicalcperftest.jmx'
                 
                 perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: '**/*.jtl'
             }
