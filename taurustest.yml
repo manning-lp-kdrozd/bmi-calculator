@@ -4,3 +4,8 @@ execution:
 scenarios:
   simple:
     script: bmicalcperftest.jmx
+    
+modules:
+  jmeter:
+    properties:
+      jmeter.save.saveservice.output_format: xml
