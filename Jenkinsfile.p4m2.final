@@ -61,7 +61,6 @@ pipeline {
                 }
             }
             steps {
-                sh 'mkdir -p /.bzt-rc && chmod 777 /.bzt-rc'
                 bzt 'taurustest.yml'
                 perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: '**/*.jtl'
             }
