@@ -2,25 +2,25 @@ pipeline {
     agent any
 
     stages {        
-        stage('Build') {
-            agent {
-                docker { image 'node:16.13.1-alpine' }
-            }
-            steps {
-                sh 'node --version'
-                sh 'CI=true npm install'
-                sh 'CI=true npm run build'
-            }
-            post {
-                success {
-                    echo 'Build succeeded!'
-                    zip zipFile: 'build.zip', archive: false, dir: 'build', overwrite: true
-                    stash name: 'mybmicalc', allowEmpty: false, includes: 'build.zip'
-                    // disabled - too much noise
-                    // slackSend channel: '#kdmicalcpipeline', color: 'good', message: "bmi calc artifacts stashed :)"
-                }
-            }
-        }
+        // stage('Build') {
+        //     agent {
+        //         docker { image 'node:16.13.1-alpine' }
+        //     }
+        //     steps {
+        //         sh 'node --version'
+        //         sh 'CI=true npm install'
+        //         sh 'CI=true npm run build'
+        //     }
+        //     post {
+        //         success {
+        //             echo 'Build succeeded!'
+        //             zip zipFile: 'build.zip', archive: false, dir: 'build', overwrite: true
+        //             stash name: 'mybmicalc', allowEmpty: false, includes: 'build.zip'
+        //             // disabled - too much noise
+        //             // slackSend channel: '#kdmicalcpipeline', color: 'good', message: "bmi calc artifacts stashed :)"
+        //         }
+        //     }
+        // }
         // There was problem and execution took minutes, so disabled it for now, as image is in local cache and dockerhub any way
         // stage('Docker image') { 
         //     steps {
@@ -35,23 +35,23 @@ pipeline {
         //         }
         //     } 
         // }
-        stage('Scan with Trivy') {
-            agent {
-                docker {
-                    image 'aquasec/trivy:latest'
-                    args "--entrypoint=''"
-                }
-            }           
-            steps {
-                sh 'trivy --cache-dir=/tmp/ image --format=json --output=./results.json krzysiekdrozd/bmicalc:latest'
-                recordIssues(tools: [trivy(pattern: './results.json')])
-            }
-        }
-        stage('Deploy on k8s') {
-            steps {
-                kubernetesDeploy configs: 'kube/**', kubeConfig: [path: ''], kubeconfigId: 'local_micro-kubeconfig', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
-            }
-        }
+        // stage('Scan with Trivy') {
+        //     agent {
+        //         docker {
+        //             image 'aquasec/trivy:latest'
+        //             args "--entrypoint=''"
+        //         }
+        //     }           
+        //     steps {
+        //         sh 'trivy --cache-dir=/tmp/ image --format=json --output=./results.json krzysiekdrozd/bmicalc:latest'
+        //         recordIssues(tools: [trivy(pattern: './results.json')])
+        //     }
+        // }
+        // stage('Deploy on k8s') {
+        //     steps {
+        //         kubernetesDeploy configs: 'kube/**', kubeConfig: [path: ''], kubeconfigId: 'local_micro-kubeconfig', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+        //     }
+        // }
 
         stage('JMeter testing') {
             agent {
@@ -61,7 +61,7 @@ pipeline {
                 }
             }
             steps {
-                sh '/opt/apache-jmeter-5.4.3/entrypoint.sh -n bmicalcperftest.jmx'
+                sh 'entrypoint.sh -n bmicalcperftest.jmx'
                 
                 perfReport filterRegex: '', showTrendGraphs: true, sourceDataFiles: '**/*.jtl'
             }
